@@ -1,0 +1,156 @@
+{
+  "teams": [
+    {
+      "id": "T1",
+      "name": "Cloud Infrastructure"
+    },
+    {
+      "id": "T2",
+      "name": "AI & Data Science"
+    },
+    {
+      "id": "T3",
+      "name": "Frontend Experience"
+    },
+    {
+      "id": "T4",
+      "name": "Security & Compliance"
+    }
+  ],
+  "people": [
+    {
+      "id": "P1",
+      "name": "Sarah Chen",
+      "role": "Engineering Manager",
+      "team_id": "T1"
+    },
+    {
+      "id": "P2",
+      "name": "Marcus Vance",
+      "role": "Senior Cloud Architect",
+      "team_id": "T1"
+    },
+    {
+      "id": "P3",
+      "name": "Elena Rostova",
+      "role": "DevOps Specialist",
+      "team_id": "T1"
+    },
+    {
+      "id": "P4",
+      "name": "David Okafor",
+      "role": "Lead Data Scientist",
+      "team_id": "T2"
+    },
+    {
+      "id": "P5",
+      "name": "Priya Patel",
+      "role": "Machine Learning Engineer",
+      "team_id": "T2"
+    },
+    {
+      "id": "P6",
+      "name": "Liam O'Connor",
+      "role": "Data Engineer",
+      "team_id": "T2"
+    },
+    {
+      "id": "P7",
+      "name": "Maya Lin",
+      "role": "Product Designer",
+      "team_id": "T3"
+    },
+    {
+      "id": "P8",
+      "name": "Alex Rivera",
+      "role": "Staff Frontend Engineer",
+      "team_id": "T3"
+    },
+    {
+      "id": "P9",
+      "name": "Hannah Schmidt",
+      "role": "UI Engineer",
+      "team_id": "T3"
+    },
+    {
+      "id": "P10",
+      "name": "James Wilson",
+      "role": "Full Stack Developer",
+      "team_id": "T3"
+    },
+    {
+      "id": "P11",
+      "name": "Fatima Al-Mansoor",
+      "role": "Security Lead",
+      "team_id": "T4"
+    },
+    {
+      "id": "P12",
+      "name": "Kenji Sato",
+      "role": "Compliance Specialist",
+      "team_id": "T4"
+    },
+    {
+      "id": "P13",
+      "name": "Carlos Gomez",
+      "role": "Systems Engineer",
+      "team_id": "T1"
+    },
+    {
+      "id": "P14",
+      "name": "Chloe Dubois",
+      "role": "AI Researcher",
+      "team_id": "T2"
+    },
+    {
+      "id": "P15",
+      "name": "Rahul Sharma",
+      "role": "Penetration Tester",
+      "team_id": "T4"
+    }
+  ],
+  "projects": [
+    {
+      "id": "J1",
+      "name": "Project Boreas",
+      "description": "Automated multi-cloud deployment orchestration platform.",
+      "owner_id": "P2",
+      "team_id": "T1"
+    },
+    {
+      "id": "J2",
+      "name": "Aurora Analytics",
+      "description": "Real-time predictive engine for customer churn and behavior modeling.",
+      "owner_id": "P4",
+      "team_id": "T2"
+    },
+    {
+      "id": "J3",
+      "name": "Polaris Design System",
+      "description": "Unified React component library and accessibility framework across products.",
+      "owner_id": "P8",
+      "team_id": "T3"
+    },
+    {
+      "id": "J4",
+      "name": "Sentinel Shield",
+      "description": "Zero-trust access management and real-time threat monitoring dashboard.",
+      "owner_id": "P11",
+      "team_id": "T4"
+    },
+    {
+      "id": "J5",
+      "name": "Frostbite Pipeline",
+      "description": "High-throughput NLP processing pipeline for automated document parsing.",
+      "owner_id": "P5",
+      "team_id": "T2"
+    },
+    {
+      "id": "J6",
+      "name": "Glacier Gateway",
+      "description": "Low-latency API gateway featuring edge-caching and rate-limiting rules.",
+      "owner_id": "P3",
+      "team_id": "T1"
+    }
+  ]
+}

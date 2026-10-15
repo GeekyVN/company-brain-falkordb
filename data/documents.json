@@ -1,0 +1,366 @@
+{
+  "documents": [
+    {
+      "id": "D1",
+      "title": "Cloud Orchestration Strategy Kickoff",
+      "author_id": "P1",
+      "date": "2026-01-15",
+      "project_ids": [
+        "J1"
+      ],
+      "text": "Today we met to discuss the core architecture for Project Boreas. Marcus Vance presented an initial evaluation of multi-cloud deployment orchestrators. After reviewing our latency requirements and current infrastructure footprint, we evaluated using internal scripts versus adopting Kubernetes-native operators for multi-cloud management. Marcus argued that Kubernetes operators provide superior state reconciliation across AWS and GCP. Carlos Gomez raised concerns about day-2 operations complexity, but we ultimately agreed that the orchestration platform needs a robust native controller. This sets the foundation for our Q1 engineering milestones and ensures our automated deployment pipelines remain reliable under high failure conditions."
+    },
+    {
+      "id": "D2",
+      "title": "Analytics Engine Data Pipeline Architecture",
+      "author_id": "P4",
+      "date": "2026-01-20",
+      "project_ids": [
+        "J2"
+      ],
+      "text": "The AI & Data Science team gathered to finalize the data ingestion layer for Aurora Analytics. David Okafor led the review of streaming platforms. We considered Apache Kafka versus cloud-managed pub/sub services for real-time customer behavior modeling. Liam O'Connor shared benchmark results indicating that managed services reduce operational overhead significantly for our team size. Priya Patel emphasized that our predictive engine requires strict message ordering to prevent churn model degradation. We decided to standardize on a fully managed stream processing pipeline to meet our latency SLAs while keeping maintenance costs low."
+    },
+    {
+      "id": "D3",
+      "title": "Design System Token Structure Review",
+      "author_id": "P8",
+      "date": "2026-01-25",
+      "project_ids": [
+        "J3"
+      ],
+      "text": "Alex Rivera and Maya Lin hosted a design sync for Polaris Design System. We discussed token architecture for cross-platform accessibility and component consistency. Hannah Schmidt pointed out inconsistencies in our legacy color contrast ratios, which failed recent compliance audits. James Wilson suggested migrating immediately to CSS variables for dynamic theming support. Maya outlined the new typography scale, ensuring WCAG 2.1 AAA compliance. We concluded that establishing a strict token hierarchy is essential before rolling out the component library to production frontend repositories next month."
+    },
+    {
+      "id": "D4",
+      "title": "Zero-Trust Security Framework Proposal",
+      "author_id": "P11",
+      "date": "2026-02-02",
+      "project_ids": [
+        "J4"
+      ],
+      "text": "Fatima Al-Mansoor and Kenji Sato reviewed the security architecture for Sentinel Shield. The focus was on selecting an identity provider and device posture assessment tool. Rahul Sharma presented penetration testing results showing vulnerabilities in our legacy VPN configurations. Kenji emphasized compliance requirements under SOC 2 Type II for continuous device monitoring. We debated whether to build an in-house proxy or integrate an enterprise identity-aware proxy solution. We agreed to implement an integrated identity-aware proxy to enforce zero-trust access immediately."
+    },
+    {
+      "id": "D5",
+      "title": "NLP Pipeline Hardware Acceleration Evaluation",
+      "author_id": "P5",
+      "date": "2026-02-10",
+      "project_ids": [
+        "J5"
+      ],
+      "text": "Priya Patel and Chloe Dubois evaluated compute infrastructure for Frostbite Pipeline. Processing high-throughput NLP documents demands massive parallelization. Chloe presented benchmarks comparing standard GPU instances versus specialized tensor processing units. David Okafor joined to review cost projections for automated document parsing at scale. We analyzed latency spikes during peak ingestion hours and determined that custom hardware accelerators are necessary to maintain sub-second response times for incoming documents."
+    },
+    {
+      "id": "D6",
+      "title": "Edge Caching and Rate Limiting Policy",
+      "author_id": "P3",
+      "date": "2026-02-15",
+      "project_ids": [
+        "J6"
+      ],
+      "text": "Elena Rostova and Sarah Chen met to finalize routing rules for Glacier Gateway. To achieve low-latency API delivery, we reviewed edge-caching strategies. Carlos Gomez recommended implementing distributed Redis clusters at regional edge nodes. We also discussed rate-limiting thresholds to protect downstream services from volumetric DDoS attacks. Sarah emphasized the need for configurable rules per tenant rather than global limits. We finalized our caching TTL parameters and rate-limiting algorithms to ensure smooth global traffic distribution."
+    },
+    {
+      "id": "D7",
+      "title": "Revisiting Project Boreas Orchestration Engine",
+      "author_id": "P2",
+      "date": "2026-02-22",
+      "project_ids": [
+        "J1"
+      ],
+      "text": "Marcus Vance proposed an update to our earlier orchestration decision for Project Boreas. While our initial plan specified Kubernetes-native operators, recent load tests conducted by Elena Rostova revealed unexpected bottleneck issues in multi-cluster state synchronization. Marcus suggested pivoting to a lightweight custom control plane using gRPC to bypass heavyweight Kubernetes abstractions. Sarah Chen reviewed the engineering bandwidth impact and approved the architecture shift, noting it will streamline our cloud provider failover mechanisms significantly."
+    },
+    {
+      "id": "D8",
+      "title": "Aurora Analytics Real-Time Storage Optimization",
+      "author_id": "P6",
+      "date": "2026-03-01",
+      "project_ids": [
+        "J2"
+      ],
+      "text": "Liam O'Connor presented storage performance metrics for Aurora Analytics. Our current document-oriented database struggled with complex aggregation queries required for churn prediction models. David Okafor and Priya Patel joined to evaluate columnar storage formats. We discussed migrating our historical analytical workload to a distributed columnar database to accelerate query execution times. After reviewing storage cost trade-offs, we confirmed that columnar indexing is required to support our growing dataset without degrading analytics dashboard performance."
+    },
+    {
+      "id": "D9",
+      "title": "Polaris Component Accessibility Standards Update",
+      "author_id": "P7",
+      "date": "2026-03-10",
+      "project_ids": [
+        "J3"
+      ],
+      "text": "Maya Lin led a design audit for Polaris Design System. Following feedback from external usability testers, Alex Rivera and Hannah Schmidt noted that our previous keyboard navigation implementation for modal dialogs was suboptimal. James Wilson proposed adopting a headless UI primitive library underneath our React components to handle accessibility out of the box. Maya approved this change to ensure robust screen reader compatibility, superseding our previous custom DOM focus-management approach."
+    },
+    {
+      "id": "D10",
+      "title": "Sentinel Shield Threat Monitoring Vendor Selection",
+      "author_id": "P11",
+      "date": "2026-03-18",
+      "project_ids": [
+        "J4"
+      ],
+      "text": "Fatima Al-Mansoor convened a security review panel with Kenji Sato and Rahul Sharma to finalize the threat-monitoring vendor for Sentinel Shield. We thoroughly evaluated our initial open-source SIEM deployment against a managed enterprise SaaS security platform. Rahul demonstrated that managing our own log ingestion pipelines consumed excessive engineering hours and introduced blind spots during high-volume alert floods. Kenji confirmed that the SaaS solution meets all data residency and compliance regulations. We officially approved switching to the enterprise SaaS security platform."
+    },
+    {
+      "id": "D11",
+      "title": "Frostbite Pipeline Document Parsing Model Update",
+      "author_id": "P14",
+      "date": "2026-03-25",
+      "project_ids": [
+        "J5"
+      ],
+      "text": "Chloe Dubois and Priya Patel reviewed accuracy metrics for Frostbite Pipeline. Our preliminary document parsing relied on a traditional transformer architecture, but new research highlights the superiority of mixture-of-experts models for complex multi-lingual layouts. David Okafor evaluated inference latency impact and confirmed that optimized pruning techniques keep execution times within acceptable thresholds. We decided to transition our core parsing models to the new architecture to boost extraction accuracy across unstructured financial documents."
+    },
+    {
+      "id": "D12",
+      "title": "Glacier Gateway Edge Routing Protocol Revision",
+      "author_id": "P13",
+      "date": "2026-04-02",
+      "project_ids": [
+        "J6"
+      ],
+      "text": "Carlos Gomez and Elena Rostova reviewed edge routing protocols for Glacier Gateway. Our earlier decision to use standard HTTP/1.1 keep-alive connections at the edge is no longer sufficient for our highest-tier enterprise clients. Sarah Chen joined to discuss bandwidth optimization. Carlos proposed fully migrating edge ingress traffic to HTTP/3 and QUIC to eliminate head-of-line blocking over unreliable mobile networks. We verified backward compatibility requirements and approved the protocol upgrade, superseding our legacy HTTP/1.1 configuration."
+    },
+    {
+      "id": "D13",
+      "title": "Cloud Infrastructure Cost Governance Framework",
+      "author_id": "P1",
+      "date": "2026-04-10",
+      "project_ids": [
+        "J1",
+        "J6"
+      ],
+      "text": "Sarah Chen led a cross-team financial review covering Cloud Infrastructure and associated deployments. With Project Boreas and Glacier Gateway expanding globally, cloud spend has grown faster than projected. Marcus Vance and Carlos Gomez presented automated cost-allocation tagging policies and instance right-sizing scripts. We established strict budgeting alerts and automated teardown rules for staging environments to maintain fiscal discipline across all cloud infrastructure accounts moving into Q2."
+    },
+    {
+      "id": "D14",
+      "title": "Aurora Analytics Feature Store Integration",
+      "author_id": "P4",
+      "date": "2026-04-18",
+      "project_ids": [
+        "J2"
+      ],
+      "text": "David Okafor, Priya Patel, and Liam O'Connor met to discuss machine learning feature management for Aurora Analytics. As our churn models grew in complexity, data drift between training and inference pipelines became a recurring issue. We reviewed commercial versus open-source feature stores. We decided to build a centralized, versioned feature repository integrated directly into our existing data warehouse to ensure model consistency and reproducibility across all predictive modeling workflows."
+    },
+    {
+      "id": "D15",
+      "title": "Polaris Design System Documentation Portal",
+      "author_id": "P9",
+      "date": "2026-04-26",
+      "project_ids": [
+        "J3"
+      ],
+      "text": "Hannah Schmidt, Maya Lin, and Alex Rivera discussed developer adoption bottlenecks for Polaris Design System. James Wilson demonstrated a new automated documentation generation pipeline that extracts component props and usage examples directly from TypeScript definitions. We agreed that maintaining an interactive documentation site with live code playgrounds is crucial for cross-functional collaboration between designers and frontend engineers."
+    },
+    {
+      "id": "D16",
+      "title": "Sentinel Shield Incident Response Automation",
+      "author_id": "P15",
+      "date": "2026-05-04",
+      "project_ids": [
+        "J4"
+      ],
+      "text": "Rahul Sharma and Fatima Al-Mansoor reviewed incident response workflows for Sentinel Shield. Manual triage of low-level security alerts was overwhelming our on-call rotation. Kenji Sato evaluated compliance logging requirements for automated remediation actions. We decided to implement automated playbook execution for common threat vectors, allowing the platform to isolate compromised endpoints instantly while notifying the security team for high-severity incidents."
+    },
+    {
+      "id": "D17",
+      "title": "Frostbite Pipeline Scalability and Queue Management",
+      "author_id": "P5",
+      "date": "2026-05-12",
+      "project_ids": [
+        "J5"
+      ],
+      "text": "Priya Patel and Chloe Dubois analyzed queue congestion issues in Frostbite Pipeline during peak batch processing runs. David Okafor joined to review message broker throughput. We evaluated transitioning from our standard message queue to a partitioned stream log architecture to prevent downstream parsing backpressure. This structural adjustment ensures predictable execution times and prevents data loss when processing millions of documents concurrently."
+    },
+    {
+      "id": "D18",
+      "title": "Glacier Gateway Security and Bot Mitigation",
+      "author_id": "P3",
+      "date": "2026-05-20",
+      "project_ids": [
+        "J6"
+      ],
+      "text": "Elena Rostova and Carlos Gomez collaborated with Fatima Al-Mansoor to enhance security at the Glacier Gateway edge. Malicious bot traffic has been bypassing standard rate-limiting heuristics. We evaluated integrating machine learning-based bot detection directly into our edge proxy layer. Sarah Chen approved the security enhancement, ensuring our public APIs remain protected against sophisticated credential stuffing and scraping attacks without impacting legitimate users."
+    },
+    {
+      "id": "D19",
+      "title": "Project Boreas Multi-Region Disaster Recovery",
+      "author_id": "P2",
+      "date": "2026-05-28",
+      "project_ids": [
+        "J1"
+      ],
+      "text": "Marcus Vance and Sarah Chen finalized the disaster recovery protocols for Project Boreas. We conducted a comprehensive simulation of a primary cloud region outage. Elena Rostova and Carlos Gomez verified that our gRPC control plane successfully triggers automated failover to our secondary region within our strict recovery time objectives. This milestone completes our high-availability readiness checklist for enterprise deployment readiness."
+    },
+    {
+      "id": "D20",
+      "title": "Q3 Engineering Roadmap Alignment",
+      "author_id": "P1",
+      "date": "2026-06-05",
+      "project_ids": [
+        "J1",
+        "J2",
+        "J3",
+        "J4",
+        "J5",
+        "J6"
+      ],
+      "text": "Sarah Chen hosted a general engineering sync with all team leads (Marcus Vance, David Okafor, Maya Lin, Fatima Al-Mansoor, Priya Patel, and Elena Rostova) to review progress across all active projects. We evaluated milestone completions for Project Boreas, Aurora Analytics, Polaris Design System, Sentinel Shield, Frostbite Pipeline, and Glacier Gateway. All teams reported strong alignment with our strategic goals, validating our architectural pivots and vendor selections made over the past two quarters."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "X1",
+      "summary": "Adopt Kubernetes-native operators for multi-cloud deployment orchestration in Project Boreas.",
+      "made_by": "P1",
+      "decided_in": "D1",
+      "affects": [
+        "J1"
+      ],
+      "date": "2026-01-15",
+      "supersedes": null
+    },
+    {
+      "id": "X2",
+      "summary": "Standardize on a fully managed stream processing pipeline for Aurora Analytics.",
+      "made_by": "P4",
+      "decided_in": "D2",
+      "affects": [
+        "J2"
+      ],
+      "date": "2026-01-20",
+      "supersedes": null
+    },
+    {
+      "id": "X3",
+      "summary": "Establish a strict CSS variable token hierarchy for the Polaris Design System.",
+      "made_by": "P8",
+      "decided_in": "D3",
+      "affects": [
+        "J3"
+      ],
+      "date": "2026-01-25",
+      "supersedes": null
+    },
+    {
+      "id": "X4",
+      "summary": "Implement an integrated identity-aware proxy for zero-trust access management in Sentinel Shield.",
+      "made_by": "P11",
+      "decided_in": "D4",
+      "affects": [
+        "J4"
+      ],
+      "date": "2026-02-02",
+      "supersedes": null
+    },
+    {
+      "id": "X5",
+      "summary": "Deploy custom hardware accelerators for high-throughput NLP document parsing in Frostbite Pipeline.",
+      "made_by": "P5",
+      "decided_in": "D5",
+      "affects": [
+        "J5"
+      ],
+      "date": "2026-02-10",
+      "supersedes": null
+    },
+    {
+      "id": "X6",
+      "summary": "Configure distributed Redis caching and flexible rate limits for Glacier Gateway.",
+      "made_by": "P3",
+      "decided_in": "D6",
+      "affects": [
+        "J6"
+      ],
+      "date": "2026-02-15",
+      "supersedes": null
+    },
+    {
+      "id": "X7",
+      "summary": "Pivot from Kubernetes operators to a lightweight gRPC custom control plane for Project Boreas.",
+      "made_by": "P2",
+      "decided_in": "D7",
+      "affects": [
+        "J1"
+      ],
+      "date": "2026-02-22",
+      "supersedes": "X1"
+    },
+    {
+      "id": "X8",
+      "summary": "Migrate analytical storage to a distributed columnar database for Aurora Analytics.",
+      "made_by": "P6",
+      "decided_in": "D8",
+      "affects": [
+        "J2"
+      ],
+      "date": "2026-03-01",
+      "supersedes": null
+    },
+    {
+      "id": "X9",
+      "summary": "Adopt headless UI primitives for component accessibility in Polaris Design System, replacing custom focus management.",
+      "made_by": "P7",
+      "decided_in": "D9",
+      "affects": [
+        "J3"
+      ],
+      "date": "2026-03-10",
+      "supersedes": null
+    },
+    {
+      "id": "X10",
+      "summary": "Switch from open-source SIEM to an enterprise SaaS security platform for threat monitoring in Sentinel Shield.",
+      "made_by": "P11",
+      "decided_in": "D10",
+      "affects": [
+        "J4"
+      ],
+      "date": "2026-03-18",
+      "supersedes": null
+    },
+    {
+      "id": "X11",
+      "summary": "Transition core parsing models to mixture-of-experts architecture in Frostbite Pipeline.",
+      "made_by": "P14",
+      "decided_in": "D11",
+      "affects": [
+        "J5"
+      ],
+      "date": "2026-03-25",
+      "supersedes": null
+    },
+    {
+      "id": "X12",
+      "summary": "Upgrade edge ingress traffic to HTTP/3 and QUIC for Glacier Gateway, superseding HTTP/1.1 keep-alive.",
+      "made_by": "P13",
+      "decided_in": "D12",
+      "affects": [
+        "J6"
+      ],
+      "date": "2026-04-02",
+      "supersedes": null
+    },
+    {
+      "id": "X13",
+      "summary": "Build a centralized and versioned feature repository for Aurora Analytics machine learning workflows.",
+      "made_by": "P4",
+      "decided_in": "D14",
+      "affects": [
+        "J2"
+      ],
+      "date": "2026-04-18",
+      "supersedes": null
+    },
+    {
+      "id": "X14",
+      "summary": "Implement automated playbook execution for incident response in Sentinel Shield.",
+      "made_by": "P15",
+      "decided_in": "D16",
+      "affects": [
+        "J4"
+      ],
+      "date": "2026-05-04",
+      "supersedes": null
+    }
+  ]
+}
