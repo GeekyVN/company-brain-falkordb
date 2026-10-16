@@ -1,4 +1,6 @@
 import streamlit as st
+import streamlit.components.v1 as components
+from pyvis.network import Network
 
 from agent import ask, q
 
@@ -9,14 +11,34 @@ st.caption(
     "and shows which graph lookups and sources it used."
 )
 
-SAMPLES = [
-    "Who owns Project Boreas?",
-    "What decisions were made about Project Boreas?",
-    "Why did we move away from Kubernetes operators in Project Boreas, and who approved it?",
-    "Who knows the most about Kubernetes?",
-    "What decisions were made about Aurora Analytics?",
-    "Who owns the Phoenix project?",
-]
+SAMPLES = {
+    "Who owns what": [
+        "Who owns Project Boreas?",
+        "Who owns Sentinel Shield and which team is it in?",
+        "Who owns Frostbite Pipeline?",
+    ],
+    "Decision history": [
+        "What decisions were made about Project Boreas?",
+        "What decisions were made about Aurora Analytics?",
+        "What decisions were made about Polaris Design System?",
+        "What decisions were made about Glacier Gateway?",
+    ],
+    "Why was it decided? (source tracing)": [
+        "Why did we move away from Kubernetes operators in Project Boreas, and who approved it?",
+        "Why did we switch the SIEM in Sentinel Shield?",
+    ],
+    "Who knows what": [
+        "Who knows the most about Kubernetes?",
+        "Who should I ask about disaster recovery?",
+    ],
+    "Multi-step questions": [
+        "Who made the latest decision on Boreas, and does that person also own the project?",
+    ],
+    "Honest about what it doesn't know": [
+        "Who owns the Phoenix project?",
+        "What was our revenue last year?",
+    ],
+}
 
 if "history" not in st.session_state:
     st.session_state.history = []
@@ -35,10 +57,53 @@ def describe_sources(trace):
     return [{"ID": r[0], "Type": r[1], "Name / title": r[2]} for r in sorted(rows, key=lambda r: r[0])]
 
 
+COLORS = {
+    "Person": "#e879f9",
+    "Project": "#3b82f6",
+    "Decision": "#f87171",
+    "Document": "#facc15",
+    "Team": "#fb923c",
+    "Ticket": "#4ade80",
+    "Message": "#38bdf8",
+}
+
+
+@st.cache_data(show_spinner=False)
+def path_graph_html(ids: tuple):
+    """Draw the graph nodes the agent used, plus the relationships between them."""
+    ids = list(ids)[:40]
+    nodes = q(
+        "MATCH (n) WHERE n.id IN $ids "
+        "RETURN n.id, labels(n)[0], coalesce(n.name, n.title, n.summary)",
+        {"ids": ids},
+    )
+    if not nodes:
+        return None
+    found = {n[0] for n in nodes}
+    edges = q(
+        "MATCH (a)-[r]->(b) WHERE a.id IN $ids AND b.id IN $ids RETURN a.id, type(r), b.id",
+        {"ids": ids},
+    )
+    net = Network(
+        height="420px", width="100%", directed=True,
+        bgcolor="#0e1117", font_color="white", cdn_resources="in_line",
+    )
+    for nid, label, text in nodes:
+        text = text or ""
+        short = text if len(text) <= 28 else text[:25] + "..."
+        net.add_node(nid, label=f"{nid}\n{short}", title=f"{label}: {text}",
+                     shape="box", color=COLORS.get(label, "#9ca3af"),
+                     font={"color": "#111827", "size": 16})
+    for a, rel, b in edges:
+        if a in found and b in found:
+            net.add_edge(a, b, label=rel, color="#9ca3af")
+    return net.generate_html()
+
+
 def show_details(trace):
     with st.expander("How this answer was built (graph lookups and sources)"):
         if not trace:
-            st.warning("No graph lookup was used for this answer.")
+            st.info("No graph lookup was used. The agent answered that this is outside the company graph.")
             return
         st.markdown("**Graph lookups**")
         for step in trace:
@@ -47,14 +112,26 @@ def show_details(trace):
         if sources:
             st.markdown("**Sources in the graph**")
             st.dataframe(sources, use_container_width=True, hide_index=True)
+        ids = tuple(sorted({i for step in trace for i in step["sources"]}))
+        html = path_graph_html(ids) if ids else None
+        if html:
+            st.markdown("**Graph path behind the answer**")
+            st.caption(
+                "Pink: person, blue: project, red: decision, yellow: document, "
+                "orange: team, green: ticket, light blue: message. Hover a node for details."
+            )
+            components.html(html, height=440, scrolling=False)
 
 
 # Sidebar with example questions
 with st.sidebar:
     st.header("Try a question")
-    for s in SAMPLES:
-        if st.button(s, use_container_width=True):
-            st.session_state.pending = s
+    st.caption("Click any question to see the answer, its sources, and the graph path.")
+    for group, questions in SAMPLES.items():
+        st.markdown(f"**{group}**")
+        for s in questions:
+            if st.button(s, use_container_width=True):
+                st.session_state.pending = s
     if st.button("Clear chat", use_container_width=True):
         st.session_state.history = []
         st.rerun()

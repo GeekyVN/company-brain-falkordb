@@ -12,7 +12,13 @@ client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 # Tried in order. Edit to match the models available to your key.
 MODELS = ["gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3.6-flash"]
 
-g = FalkorDB(host="localhost", port=6379).select_graph("company_brain")
+db = FalkorDB(
+    host=os.getenv("FALKORDB_HOST", "localhost"),
+    port=int(os.getenv("FALKORDB_PORT", "6379")),
+    username=os.getenv("FALKORDB_USERNAME") or None,
+    password=os.getenv("FALKORDB_PASSWORD") or None,
+)
+g = db.select_graph("company_brain")
 
 # Every tool call is recorded here so the UI can show which graph parts were used.
 TRACE = []
@@ -35,6 +41,9 @@ def who_owns(project: str) -> dict:
     Args:
         project: Project name or a distinctive part of it, e.g. "Atlas".
     """
+    if project.strip().lower() in {"", "project", "projects", "the", "a"}:
+        log("who_owns", {"project": project}, [])
+        return {"results": []}
     rows = q(
         """
         MATCH (p:Person)-[:OWNS]->(j:Project)
@@ -133,6 +142,9 @@ def decision_history(project: str) -> dict:
     Args:
         project: Project name or part of it.
     """
+    if project.strip().lower() in {"", "project", "projects", "the", "a"}:
+        log("decision_history", {"project": project}, [])
+        return {"history": []}
     rows = q(
         """
         MATCH (d:Decision)-[:AFFECTS]->(j:Project)
@@ -198,7 +210,7 @@ Known projects: {projects}
 Rules:
 - Always use the tools to look things up. Never answer from your own knowledge.
 - Tool arguments should be short keywords or project names, not whole sentences.
-- If a search returns nothing, try at most one different keyword for the same thing. Never search for unrelated projects or people.
+- If a lookup returns no results, stop and say you could not find it. Do not retry with a shorter or more generic keyword, and never search for unrelated projects or people.
 - For "why" questions about a decision, call trace_source on the decision id to read the reasoning.
 - Mention whether a decision is current or was superseded.
 - Always cite the IDs you used in square brackets, including for ownership answers, for example [J1] and [P2], [X3] or [D7].

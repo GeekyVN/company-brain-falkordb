@@ -1,0 +1,5 @@
+streamlit
+falkordb
+google-genai
+pyvis
+python-dotenv
