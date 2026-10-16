@@ -1,8 +1,18 @@
+import math
+
 import streamlit as st
 import streamlit.components.v1 as components
-from pyvis.network import Network
+
+try:
+    from pyvis.network import Network
+    PYVIS_OK = True
+    PYVIS_ERROR = ""
+except Exception as e:  # keep the app usable even if the graph library fails to load
+    PYVIS_OK = False
+    PYVIS_ERROR = f"{type(e).__name__}: {e}"
 
 from agent import ask, q
+from updates import add_decision, current_decisions, list_people, reset_demo
 
 st.set_page_config(page_title="Company Brain", page_icon="🧠", layout="wide")
 st.title("🧠 Company Brain")
@@ -85,19 +95,46 @@ def path_graph_html(ids: tuple):
         {"ids": ids},
     )
     net = Network(
-        height="420px", width="100%", directed=True,
+        height="520px", width="100%", directed=True,
         bgcolor="#0e1117", font_color="white", cdn_resources="in_line",
     )
+    # Fixed layout: positions are computed once here, so the picture never drifts.
+    links = [(a, b) for a, _, b in edges if a in found and b in found]
+    ordered = sorted(found)
+    try:
+        import networkx as nx
+
+        G = nx.Graph()
+        G.add_nodes_from(ordered)
+        G.add_edges_from(links)
+        pos = nx.spring_layout(G, seed=7, k=1.6 / max(len(ordered), 1) ** 0.5, iterations=200)
+    except Exception:  # fallback: place the nodes evenly on a circle
+        pos = {
+            nid: (math.cos(2 * math.pi * i / len(ordered)), math.sin(2 * math.pi * i / len(ordered)))
+            for i, nid in enumerate(ordered)
+        }
     for nid, label, text in nodes:
         text = text or ""
         short = text if len(text) <= 28 else text[:25] + "..."
+        x, y = pos[nid]
         net.add_node(nid, label=f"{nid}\n{short}", title=f"{label}: {text}",
                      shape="box", color=COLORS.get(label, "#9ca3af"),
-                     font={"color": "#111827", "size": 16})
+                     font={"color": "#111827", "size": 16},
+                     x=float(x) * 480, y=float(y) * 200, physics=False)
     for a, rel, b in edges:
         if a in found and b in found:
             net.add_edge(a, b, label=rel, color="#9ca3af")
-    return net.generate_html()
+    net.set_options(
+        '{"edges":{"font":{"size":12,"color":"#e5e7eb","strokeWidth":3,"strokeColor":"#0e1117"},'
+        '"smooth":{"type":"continuous"}},'
+        '"nodes":{"margin":10},'
+        '"physics":{"enabled":false}}'
+    )
+    html = net.generate_html()
+    # After the first draw, zoom out just enough to show every node (never zoom in past 100%).
+    hook = "network = new vis.Network(container, data, options);"
+    fit = hook + ' network.once("afterDrawing", function () { network.fit({maxZoomLevel: 1.0, animation: false}); });'
+    return html.replace(hook, fit, 1)
 
 
 def show_details(trace):
@@ -113,14 +150,16 @@ def show_details(trace):
             st.markdown("**Sources in the graph**")
             st.dataframe(sources, use_container_width=True, hide_index=True)
         ids = tuple(sorted({i for step in trace for i in step["sources"]}))
-        html = path_graph_html(ids) if ids else None
+        if ids and not PYVIS_OK:
+            st.caption(f"Graph drawing is unavailable here ({PYVIS_ERROR}).")
+        html = path_graph_html(ids) if (ids and PYVIS_OK) else None
         if html:
             st.markdown("**Graph path behind the answer**")
             st.caption(
                 "Pink: person, blue: project, red: decision, yellow: document, "
                 "orange: team, green: ticket, light blue: message. Hover a node for details."
             )
-            components.html(html, height=440, scrolling=False)
+            components.html(html, height=540, scrolling=False)
 
 
 # Sidebar with example questions
@@ -135,6 +174,52 @@ with st.sidebar:
     if st.button("Clear chat", use_container_width=True):
         st.session_state.history = []
         st.rerun()
+
+# Live knowledge update: add a decision that replaces a current one
+with st.sidebar:
+    st.divider()
+    if "flash" in st.session_state:
+        st.success(st.session_state.pop("flash"))
+    with st.expander("Update the knowledge (live demo)"):
+        st.caption(
+            "Add a decision that replaces a current one, then ask about that project again. "
+            "The answer changes, and the old decision is marked as superseded."
+        )
+        try:
+            current = current_decisions()
+            people = list_people()
+        except Exception as e:
+            current, people = [], []
+            st.error(f"Could not read the graph: {e}")
+        if current and people:
+            summaries = dict(current)
+            names = dict(people)
+            with st.form("new_decision", clear_on_submit=True):
+                old_id = st.selectbox(
+                    "Decision to replace",
+                    options=[c[0] for c in current],
+                    format_func=lambda i: f"{i}: {summaries[i][:70]}",
+                )
+                person_id = st.selectbox(
+                    "Made by", options=[p[0] for p in people], format_func=lambda i: names[i]
+                )
+                summary = st.text_input("New decision", max_chars=200)
+                reason = st.text_area("Why was it made?", max_chars=600)
+                submitted = st.form_submit_button("Add decision", use_container_width=True)
+            if submitted:
+                try:
+                    did, docid = add_decision(old_id, summary, reason, person_id)
+                    st.session_state.flash = (
+                        f"Added {did} (source note {docid}). It now replaces {old_id}. "
+                        "Ask about that project again to see the change."
+                    )
+                    st.rerun()
+                except Exception as e:
+                    st.error(str(e))
+        if st.button("Reset demo changes", use_container_width=True):
+            removed = reset_demo()
+            st.session_state.flash = f"Removed {removed} demo item(s). The original data is unchanged."
+            st.rerun()
 
 # Show earlier turns
 for turn in st.session_state.history:
