@@ -1,10 +1,16 @@
 import json
+import os
 
 from falkordb import FalkorDB
 
 GRAPH_NAME = "company_brain"
 
-db = FalkorDB(host="localhost", port=6379)
+db = FalkorDB(
+    host=os.getenv("FALKORDB_HOST", "localhost"),
+    port=int(os.getenv("FALKORDB_PORT", "6379")),
+    username=os.getenv("FALKORDB_USERNAME") or None,
+    password=os.getenv("FALKORDB_PASSWORD") or None,
+)
 g = db.select_graph(GRAPH_NAME)
 
 # Start clean so the script can be rerun safely
