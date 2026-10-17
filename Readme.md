@@ -173,7 +173,7 @@ All visitors share one graph, so please reset after trying the form.
 **Requirements:** Python 3.11+, Docker, and a free [Google AI Studio](https://aistudio.google.com) API key.
 
 ```bash
-git clone https://github.com/GeekyVishweshNeelesh/company-brain-falkordb.git
+git clone https://github.com/GeekyVN/company-brain-falkordb.git
 cd company-brain-falkordb
 pip install -r requirements.txt
 
