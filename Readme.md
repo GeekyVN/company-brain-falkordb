@@ -10,7 +10,7 @@ Built for **Graph Hacks: Context for AI Agents** (WeMakeDevs × FalkorDB) · **T
 | **Live demo** | https://falkordb-company-brain.streamlit.app/ |
 | **Repository** | https://github.com/GeekyVN/company-brain-falkordb |
 | **Demo video** | https://youtu.be/RTSbBN0zS7A 
-                  (backup copy: https://drive.google.com/file/d/1P_Pwk0Gh5DeUyVOYliVvV_sbEL6aGPLx/view?usp=sharing) |
+|                |(backup copy: https://drive.google.com/file/d/1P_Pwk0Gh5DeUyVOYliVvV_sbEL6aGPLx/view?usp=sharing) |
 | **Blog post** | https://medium.com/@vishweshneelesh99/company-brain-how-i-taught-an-ai-agent-to-understand-a-company-using-a-knowledge-graph-2ab50f87b8c0 |
 
 > The live demo uses a FalkorDB Cloud free-tier instance and a free Gemini key. If the demo is slow, rate-limited, or the database has been stopped for inactivity, follow the local setup below. It takes about five minutes.
