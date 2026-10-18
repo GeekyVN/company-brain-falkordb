@@ -9,8 +9,7 @@ Built for **Graph Hacks: Context for AI Agents** (WeMakeDevs × FalkorDB) · **T
 |---|---|
 | **Live demo** | https://falkordb-company-brain.streamlit.app/ |
 | **Repository** | https://github.com/GeekyVN/company-brain-falkordb |
-| **Demo video:**|  https://youtu.be/RTSbBN0zS7A
-|               |(Backup copy: <GDrive https://drive.google.com/file/d/1P_Pwk0Gh5DeUyVOYliVvV_sbEL6aGPLx/view?usp=sharing>)
+| **Demo video** | https://youtu.be/RTSbBN0zS7A (backup copy: https://drive.google.com/file/d/1P_Pwk0Gh5DeUyVOYliVvV_sbEL6aGPLx/view?usp=sharing) |
 | **Blog post** | https://medium.com/@vishweshneelesh99/company-brain-how-i-taught-an-ai-agent-to-understand-a-company-using-a-knowledge-graph-2ab50f87b8c0 |
 
 > The live demo uses a FalkorDB Cloud free-tier instance and a free Gemini key. If the demo is slow, rate-limited, or the database has been stopped for inactivity, follow the local setup below. It takes about five minutes.
@@ -227,6 +226,15 @@ The dataset is **fully synthetic**: a fictional company, "Northwind Labs", with 
 - The live demo uses free tiers. The Gemini quota is shared by all visitors, and the free FalkorDB instance stops after a day of inactivity and is deleted after a week without use.
 - The live update form writes to a shared graph with no authentication. It is flagged and resettable, and meant for demonstration only.
 - The LLM can still misread a result. That is why every answer shows the lookups, the cited IDs, and the graph path so it can be checked.
+- The agent answers questions and traces decisions. It does not take actions in external systems yet, and it has no memory between sessions.
+
+## What I'd build next
+
+- Rank experts with a graph algorithm such as PageRank or centrality, instead of keyword counts in `who_knows`.
+- Add vector search, so questions can start from meaning as well as keywords.
+- Store "approved by" relationships in the graph. Right now that detail lives in the document text.
+- Keep a separate memory graph for each user, so the agent can remember earlier sessions.
+- Let the agent propose actions (for example, flag an owner or draft an escalation) that a person approves.
 
 ## AI assistance disclosure
 
@@ -236,6 +244,8 @@ In line with the hackathon rules, AI assistants were used in this project:
 - **Google Gemini** is used at runtime to choose tools and write answers, and was used to generate the synthetic dataset.
 
 I tested the system against the source data, verified the answers and cited IDs, and am responsible for the submission.
+
+**What I did myself:** chose the track and the scope; set up FalkorDB locally and on FalkorDB Cloud, the repository, and the deployment; ran and tested every stage; checked answers against the source data and fixed weak links in the generated dataset; and decided the product features, including the sample questions, the stable graph view, and the live update.
 
 ## Author
 
